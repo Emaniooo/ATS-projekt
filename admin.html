@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <h1>Admin Panel</h1>
+
+  <h2>Skapa kund</h2>
+  <form id="create-customer-form">
+    <input type="text" id="customer-name" placeholder="Kundnamn" required>
+    <button type="submit">Skapa kund</button>
+  </form>
+
+  <h2>Skapa användare</h2>
+  <form id="create-user-form">
+    <input type="email" id="new-user-email" placeholder="Email" required>
+    <input type="password" id="new-user-password" placeholder="Lösenord" required>
+    <button type="submit">Skapa användare</button>
+  </form>
+
+</body>
+</html>
