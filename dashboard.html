@@ -11,7 +11,28 @@
 
   <h1>Dashboard</h1>
 
-  <div id="jobs"></div>
+  <h2>Skapa nytt jobb</h2>
+  <form id="create-job-form">
+    <input type="text" id="job-title" placeholder="Jobbtitel" required>
+    <textarea id="job-description" placeholder="Beskrivning"></textarea>
+    <button type="submit">Skapa jobb</button>
+  </form>
+  <p id="job-message"></p>
+
+  <h2>Dina jobb</h2>
+  <div id="jobs-list"></div>
+
+  <h2>Skapa kandidat</h2>
+  <form id="create-candidate-form">
+    <input type="text" id="candidate-name" placeholder="Namn" required>
+    <input type="email" id="candidate-email" placeholder="Email" required>
+    <input type="text" id="candidate-linkedin" placeholder="LinkedIn URL">
+    <select id="candidate-job">
+      <option value="">Välj jobb</option>
+    </select>
+    <button type="submit">Skapa kandidat</button>
+  </form>
+  <p id="candidate-message"></p>
 
 </body>
 </html>

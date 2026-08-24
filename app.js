@@ -32,6 +32,29 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // Ladda jobb när dashboard öppnas
+  if (document.getElementById("jobs-list")) {
+    loadJobs();
+  }
+
+  // Skapa jobb
+  const createJobForm = document.getElementById("create-job-form");
+  if (createJobForm) {
+    createJobForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      createJob();
+    });
+  }
+
+  // Skapa kandidat
+  const createCandidateForm = document.getElementById("create-candidate-form");
+  if (createCandidateForm) {
+    createCandidateForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      createCandidate();
+    });
+  }
 });
 
 // HÄMTA PROFIL
