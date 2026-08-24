@@ -23,7 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      
+      const profile = await getProfile();
+
+      if (profile.role === "admin") {
+        window.location.href = "admin.html";
+      } else {
+        window.location.href = "dashboard.html";
+      }
+
     });
   }
 });
