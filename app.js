@@ -30,7 +30,20 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         window.location.href = "dashboard.html";
       }
-
     });
   }
 });
+
+// HÄMTA PROFIL
+async function getProfile() {
+  const { data: { user } } = await client.auth.getUser();
+  if (!user) return null;
+
+  const { data } = await client
+    .from("user_profiles")
+    .select("role, customer_id")
+    .eq("id", user.id)
+    .single();
+
+  return data;
+}
