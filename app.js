@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Ladda jobb när dashboard öppnas
   if (document.getElementById("jobs-list")) {
     loadJobs();
+    loadKanban();
   }
 
   // Skapa jobb
@@ -55,6 +56,36 @@ document.addEventListener("DOMContentLoaded", () => {
       createCandidate();
     });
   }
+
+  // Filter‑events för kanban
+  const filterJob = document.getElementById("filter-job");
+  if (filterJob) {
+    filterJob.addEventListener("change", loadKanban);
+  }
+  const filterName = document.getElementById("filter-name");
+  if (filterName) {
+    filterName.addEventListener("input", loadKanban);
+  }
+
+  // Drag‑and‑drop listeners
+  document.querySelectorAll(".kanban-items").forEach(col => {
+    col.addEventListener("dragover", e => e.preventDefault());
+
+    col.addEventListener("drop", async e => {
+      const id = e.dataTransfer.getData("id");
+      const column = e.target.closest(".kanban-column");
+      if (!column) return;
+
+      const newStage = column.dataset.stage;
+
+      await client
+        .from("candidates")
+        .update({ stage: newStage })
+        .eq("id", id);
+
+      loadKanban();
+    });
+  });
 });
 
 // HÄMTA PROFIL
@@ -93,19 +124,19 @@ async function loadJobs() {
   }
 
   const container = document.getElementById("jobs-list");
-  if (!container) return;
+  if (container) {
+    container.innerHTML = "";
 
-  container.innerHTML = "";
-
-  jobs.forEach(job => {
-    const div = document.createElement("div");
-    div.className = "job-card";
-    div.innerHTML = `
-      <h3>${job.title}</h3>
-      <p>${job.status}</p>
-    `;
-    container.appendChild(div);
-  });
+    jobs.forEach(job => {
+      const div = document.createElement("div");
+      div.className = "job-card";
+      div.innerHTML = `
+        <h3>${job.title}</h3>
+        <p>${job.status}</p>
+      `;
+      container.appendChild(div);
+    });
+  }
 
   // Fyll dropdown för kandidater
   const jobSelect = document.getElementById("candidate-job");
@@ -113,6 +144,15 @@ async function loadJobs() {
     jobSelect.innerHTML = '<option value="">Välj jobb</option>';
     jobs.forEach(job => {
       jobSelect.innerHTML += `<option value="${job.id}">${job.title}</option>`;
+    });
+  }
+
+  // Fyll filter-job dropdown
+  const filterJob = document.getElementById("filter-job");
+  if (filterJob) {
+    filterJob.innerHTML = '<option value="">Alla jobb</option>';
+    jobs.forEach(job => {
+      filterJob.innerHTML += `<option value="${job.id}">${job.title}</option>`;
     });
   }
 }
@@ -147,7 +187,8 @@ async function createJob() {
   document.getElementById("job-message").textContent = "Jobb skapat!";
   document.getElementById("create-job-form").reset();
 
-  loadJobs();
+  await loadJobs();
+  await loadKanban();
 }
 
 // SKAPA KANDIDAT
@@ -159,7 +200,6 @@ async function createCandidate() {
 
   const { data: { user } } = await client.auth.getUser();
 
-  // Hämta customer_id från user_profiles
   const { data: profile } = await client
     .from("user_profiles")
     .select("customer_id")
@@ -173,7 +213,7 @@ async function createCandidate() {
       email,
       linkedin,
       job_id: jobId,
-      customer_id: profile.customer_id,   // ← DENNA ÄR NYCKELN
+      customer_id: profile.customer_id,
       stage: "applied"
     });
 
@@ -184,5 +224,68 @@ async function createCandidate() {
 
   document.getElementById("candidate-message").textContent = "Kandidat skapad!";
   document.getElementById("create-candidate-form").reset();
+
+  await loadKanban();
 }
 
+const stages = ["applied", "screening", "interview", "offer", "hired", "rejected"];
+
+async function loadKanban() {
+  const { data: { user } } = await client.auth.getUser();
+  if (!user) return;
+
+  const { data: profile } = await client
+    .from("user_profiles")
+    .select("customer_id")
+    .eq("id", user.id)
+    .single();
+
+  const { data: candidates, error } = await client
+    .from("candidates")
+    .select("*")
+    .eq("customer_id", profile.customer_id);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  renderKanban(candidates || []);
+}
+
+function renderKanban(candidates) {
+  stages.forEach(stage => {
+    const col = document.getElementById(`col-${stage}`);
+    if (col) col.innerHTML = "";
+  });
+
+  const jobFilterEl = document.getElementById("filter-job");
+  const nameFilterEl = document.getElementById("filter-name");
+
+  const jobFilter = jobFilterEl ? jobFilterEl.value : "";
+  const nameFilter = nameFilterEl ? nameFilterEl.value.toLowerCase() : "";
+
+  candidates
+    .filter(c => !jobFilter || c.job_id === jobFilter)
+    .filter(c => c.name.toLowerCase().includes(nameFilter))
+    .forEach(c => {
+      const card = document.createElement("div");
+      card.className = "kanban-card";
+      card.draggable = true;
+      card.dataset.id = c.id;
+      card.innerHTML = `
+        <strong>${c.name}</strong><br>
+        ${c.email}<br>
+        <small>${c.stage}</small>
+      `;
+
+      card.addEventListener("dragstart", dragStart);
+
+      const col = document.getElementById(`col-${c.stage}`);
+      if (col) col.appendChild(card);
+    });
+}
+
+function dragStart(e) {
+  e.dataTransfer.setData("id", e.target.dataset.id);
+}
