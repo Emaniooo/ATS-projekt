@@ -21,6 +21,48 @@
 
   <h2>Dina jobb</h2>
   <div id="jobs-list"></div>
+  
+<h2>Kandidat Kanban</h2>
+
+<div id="kanban-filters">
+  <select id="filter-job">
+    <option value="">Alla jobb</option>
+  </select>
+
+  <input id="filter-name" type="text" placeholder="Sök kandidat...">
+</div>
+
+<div id="kanban-board" class="kanban-board">
+  <div class="kanban-column" data-stage="applied">
+    <h3>Applied</h3>
+    <div class="kanban-items" id="col-applied"></div>
+  </div>
+
+  <div class="kanban-column" data-stage="screening">
+    <h3>Screening</h3>
+    <div class="kanban-items" id="col-screening"></div>
+  </div>
+
+  <div class="kanban-column" data-stage="interview">
+    <h3>Interview</h3>
+    <div class="kanban-items" id="col-interview"></div>
+  </div>
+
+  <div class="kanban-column" data-stage="offer">
+    <h3>Offer</h3>
+    <div class="kanban-items" id="col-offer"></div>
+  </div>
+
+  <div class="kanban-column" data-stage="hired">
+    <h3>Hired</h3>
+    <div class="kanban-items" id="col-hired"></div>
+  </div>
+
+  <div class="kanban-column" data-stage="rejected">
+    <h3>Rejected</h3>
+    <div class="kanban-items" id="col-rejected"></div>
+  </div>
+</div>
 
   <h2>Skapa kandidat</h2>
   <form id="create-candidate-form">
