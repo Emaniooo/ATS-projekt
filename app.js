@@ -72,10 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
     col.addEventListener("dragover", e => e.preventDefault());
 
     col.addEventListener("drop", async e => {
-      const id = e.dataTransfer.getData("id");
-      const column = e.target.closest(".kanban-column");
-      if (!column) return;
+      e.preventDefault();
 
+      const id = e.dataTransfer.getData("id");
+
+      const column = col.closest(".kanban-column");
       const newStage = column.dataset.stage;
 
       await client
@@ -287,5 +288,10 @@ function renderKanban(candidates) {
 }
 
 function dragStart(e) {
+  e.dataTransfer.setData("id", e.target.dataset.id);
+}
+
+function dragStart(e) {
+  console.log("DRAG START FIRED");
   e.dataTransfer.setData("id", e.target.dataset.id);
 }
