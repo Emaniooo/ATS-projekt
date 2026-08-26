@@ -32,73 +32,85 @@
   </div>
 </nav>
 
+<div class="page-container">
+  <h1 class="page-title">Dashboard</h1>
 
-  <h1>Dashboard</h1>
 
-  <h2>Skapa nytt jobb</h2>
-  <form id="create-job-form">
-    <input type="text" id="job-title" placeholder="Jobbtitel" required>
-    <textarea id="job-description" placeholder="Beskrivning"></textarea>
-    <button type="submit">Skapa jobb</button>
-  </form>
-  <p id="job-message"></p>
+<div class="dashboard-grid">
 
+  <section class="dash-section">
+    <h2>Skapa nytt jobb</h2>
+    <form id="create-job-form" class="form-card">
+      <input type="text" id="job-title" placeholder="Jobbtitel" required>
+      <textarea id="job-description" placeholder="Beskrivning"></textarea>
+      <button type="submit">Skapa jobb</button>
+    </form>
+    <p id="job-message"></p>
+  </section>
+
+  <section class="dash-section">
+    <h2>Skapa kandidat</h2>
+    <form id="create-candidate-form" class="form-card">
+      <input type="text" id="candidate-name" placeholder="Namn" required>
+      <input type="email" id="candidate-email" placeholder="Email" required>
+      <input type="text" id="candidate-linkedin" placeholder="LinkedIn URL">
+      <select id="candidate-job">
+        <option value="">Välj jobb</option>
+      </select>
+      <button type="submit">Skapa kandidat</button>
+    </form>
+    <p id="candidate-message"></p>
+  </section>
+
+</div>
+
+<section class="dash-section">
   <h2>Dina jobb</h2>
-  <div id="jobs-list"></div>
-  
-<h2>Kandidat Kanban</h2>
+  <div id="jobs-list" class="jobs-grid"></div>
+</section>
 
-<div id="kanban-filters">
-  <select id="filter-job">
-    <option value="">Alla jobb</option>
-  </select>
+<section class="dash-section">
+  <h2>Kandidat Kanban</h2>
 
-  <input id="filter-name" type="text" placeholder="Sök kandidat...">
-</div>
-
-<div id="kanban-board" class="kanban-board">
-  <div class="kanban-column" data-stage="applied">
-    <h3>Applied</h3>
-    <div class="kanban-items" id="col-applied"></div>
-  </div>
-
-  <div class="kanban-column" data-stage="screening">
-    <h3>Screening</h3>
-    <div class="kanban-items" id="col-screening"></div>
-  </div>
-
-  <div class="kanban-column" data-stage="interview">
-    <h3>Interview</h3>
-    <div class="kanban-items" id="col-interview"></div>
-  </div>
-
-  <div class="kanban-column" data-stage="offer">
-    <h3>Offer</h3>
-    <div class="kanban-items" id="col-offer"></div>
-  </div>
-
-  <div class="kanban-column" data-stage="hired">
-    <h3>Hired</h3>
-    <div class="kanban-items" id="col-hired"></div>
-  </div>
-
-  <div class="kanban-column" data-stage="rejected">
-    <h3>Rejected</h3>
-    <div class="kanban-items" id="col-rejected"></div>
-  </div>
-</div>
-
-  <h2>Skapa kandidat</h2>
-  <form id="create-candidate-form">
-    <input type="text" id="candidate-name" placeholder="Namn" required>
-    <input type="email" id="candidate-email" placeholder="Email" required>
-    <input type="text" id="candidate-linkedin" placeholder="LinkedIn URL">
-    <select id="candidate-job">
-      <option value="">Välj jobb</option>
+  <div id="kanban-filters" class="kanban-filters">
+    <select id="filter-job">
+      <option value="">Alla jobb</option>
     </select>
-    <button type="submit">Skapa kandidat</button>
-  </form>
-  <p id="candidate-message"></p>
+    <input id="filter-name" type="text" placeholder="Sök kandidat...">
+  </div>
 
+  <div id="kanban-board" class="kanban-board">
+    <div class="kanban-column" data-stage="applied">
+      <h3>Applied</h3>
+      <div class="kanban-items" id="col-applied"></div>
+    </div>
+
+    <div class="kanban-column" data-stage="screening">
+      <h3>Screening</h3>
+      <div class="kanban-items" id="col-screening"></div>
+    </div>
+
+    <div class="kanban-column" data-stage="interview">
+      <h3>Interview</h3>
+      <div class="kanban-items" id="col-interview"></div>
+    </div>
+
+    <div class="kanban-column" data-stage="offer">
+      <h3>Offer</h3>
+      <div class="kanban-items" id="col-offer"></div>
+    </div>
+
+    <div class="kanban-column" data-stage="hired">
+      <h3>Hired</h3>
+      <div class="kanban-items" id="col-hired"></div>
+    </div>
+
+    <div class="kanban-column" data-stage="rejected">
+      <h3>Rejected</h3>
+      <div class="kanban-items" id="col-rejected"></div>
+    </div>
+  </div>
+</section>
+</div>
 </body>
 </html>

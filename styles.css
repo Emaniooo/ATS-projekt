@@ -189,4 +189,159 @@ button {
 .feature-card p {
   color: #555;
 }
+/* PAGE TITLE */
+.page-title {
+  font-size: 36px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+/* GRID FÖR JOBB + KANDIDAT */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* SECTIONS */
+.dash-section {
+  margin-bottom: 40px;
+}
+
+/* FORM CARDS */
+.form-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.form-card input,
+.form-card textarea,
+.form-card select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.form-card button {
+  width: 100%;
+  padding: 12px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* JOBB GRID */
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.job-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* KANBAN FILTERS */
+.kanban-filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.kanban-column {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.kanban-items {
+  min-height: 200px;
+  border: 1px dashed #ccc;
+  padding: 10px;
+}
+
+.kanban-card {
+  background: #f7f7f7;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  cursor: grab;
+}
+
+/* ADMIN GRID */
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* ADMIN SECTIONS */
+.admin-section {
+  margin-bottom: 40px;
+}
+
+/* FORM CARDS (delas med dashboard) */
+.form-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.form-card input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.form-card button {
+  width: 100%;
+  padding: 12px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* PAGE TITLE */
+.page-title {
+  font-size: 36px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+}
+
+/* redan definierade gridar funkar bättre nu */
+.dashboard-grid,
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
 

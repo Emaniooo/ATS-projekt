@@ -38,20 +38,29 @@
   </div>
 </nav>
 
-  <h1>Admin Panel</h1>
+<div class="page-container">
+<h1 class="page-title">Admin Panel</h1>
 
-  <h2>Skapa kund</h2>
-  <form id="create-customer-form">
-    <input type="text" id="customer-name" placeholder="Kundnamn" required>
-    <button type="submit">Skapa kund</button>
-  </form>
+<div class="admin-grid">
 
-  <h2>Skapa användare</h2>
-  <form id="create-user-form">
-    <input type="email" id="new-user-email" placeholder="Email" required>
-    <input type="password" id="new-user-password" placeholder="Lösenord" required>
-    <button type="submit">Skapa användare</button>
-  </form>
+  <section class="admin-section">
+    <h2>Skapa kund</h2>
+    <form id="create-customer-form" class="form-card">
+      <input type="text" id="customer-name" placeholder="Kundnamn" required>
+      <button type="submit">Skapa kund</button>
+    </form>
+  </section>
 
+  <section class="admin-section">
+    <h2>Skapa användare</h2>
+    <form id="create-user-form" class="form-card">
+      <input type="email" id="new-user-email" placeholder="Email" required>
+      <input type="password" id="new-user-password" placeholder="Lösenord" required>
+      <button type="submit">Skapa användare</button>
+    </form>
+  </section>
+
+</div>
+</div>
 </body>
 </html>
