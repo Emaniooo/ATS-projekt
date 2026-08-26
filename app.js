@@ -12,7 +12,7 @@ async function getProfile() {
     .from("user_profiles")
     .select("role, customer_id")
     .eq("id", user.id)
-    .single();
+.maybeSingle();
 
   if (error) {
     console.error("getProfile error:", error);
@@ -44,7 +44,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const profile = await getProfile();
       if (!profile || !profile.role) {
-        // fallback: skicka till dashboard om profil saknas
         window.location.href = "dashboard.html";
         return;
       }
@@ -53,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // PROFILMENY (navbar, används på sidor som har den)
+  // PROFILMENY (navbar)
   const authButton = document.getElementById("auth-button");
   const adminLink = document.getElementById("admin-link");
   const profileIconContainer = document.getElementById("profile-icon-container");
@@ -134,7 +133,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     filterName.addEventListener("input", loadKanban);
   }
 
-  // ADMIN PANEL
+  // ADMIN PANEL: skapa kund
   const createCustomerForm = document.getElementById("create-customer-form");
   if (createCustomerForm) {
     createCustomerForm.addEventListener("submit", async (e) => {
@@ -154,6 +153,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  // ADMIN PANEL: skapa användare (Alternativ 1)
   const createUserForm = document.getElementById("create-user-form");
   if (createUserForm) {
     createUserForm.addEventListener("submit", async (e) => {
@@ -165,12 +165,33 @@ document.addEventListener("DOMContentLoaded", async () => {
       const email = emailEl ? emailEl.value : "";
       const password = passwordEl ? passwordEl.value : "";
 
+      // 1. Hämta adminens profil (för customer_id)
+      const { data: { user: adminUser } } = await client.auth.getUser();
+      const { data: adminProfile, error: adminProfileError } = await client
+        .from("user_profiles")
+        .select("customer_id")
+        .eq("id", adminUser.id)
+        .maybeSingle();
+
+      if (adminProfileError || !adminProfile) {
+        alert("Kunde inte hämta adminens profil.");
+        return;
+      }
+
+      // 2. Skapa auth-user
       const { data, error } = await client.auth.signUp({ email, password });
 
       if (error) {
         alert(error.message);
         return;
       }
+
+      // 3. Skapa user_profiles-rad för nya användaren
+      await client.from("user_profiles").insert({
+        id: data.user.id,
+        role: "customer",
+        customer_id: adminProfile.customer_id
+      });
 
       alert("Användare skapad!");
       createUserForm.reset();
@@ -209,7 +230,7 @@ async function loadJobs() {
     .from("user_profiles")
     .select("customer_id")
     .eq("id", user.id)
-    .single();
+.maybeSingle();
 
   if (profileError || !profile) {
     console.error("loadJobs profile error:", profileError);
@@ -274,7 +295,7 @@ async function createJob() {
     .from("user_profiles")
     .select("customer_id")
     .eq("id", user.id)
-    .single();
+.maybeSingle();
 
   if (profileError || !profile) {
     if (msgEl) msgEl.textContent = "Kunde inte hämta profil.";
@@ -323,7 +344,7 @@ async function createCandidate() {
     .from("user_profiles")
     .select("customer_id")
     .eq("id", user.id)
-    .single();
+.maybeSingle();
 
   if (profileError || !profile) {
     if (msgEl) msgEl.textContent = "Kunde inte hämta profil.";
@@ -363,7 +384,7 @@ async function loadKanban() {
     .from("user_profiles")
     .select("customer_id")
     .eq("id", user.id)
-    .single();
+.maybeSingle();
 
   if (profileError || !profile) {
     console.error("loadKanban profile error:", profileError);
