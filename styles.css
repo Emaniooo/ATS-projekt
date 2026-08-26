@@ -59,7 +59,134 @@ button {
   border-radius: 6px;
   cursor: grab;
 }
-nav a {
-  margin-right: 15px;
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 15px 25px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 30px;
+}
+
+.nav-left a {
+  margin-right: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav-logo {
+  font-size: 20px;
+}
+
+.nav-right a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #0077ff;
+}
+
+/* PROFILMENY */
+.profile-icon-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 8px;
+  width: 180px;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.profile-dropdown p {
+  margin: 0 0 6px 0;
+}
+
+#logout-btn {
+  width: 100%;
+  padding: 8px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+}
+/* HERO SECTION */
+.hero {
+  text-align: center;
+  margin-top: 80px;
+  padding: 40px 20px;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 10px;
   font-weight: bold;
 }
+
+.hero p {
+  font-size: 20px;
+  margin-bottom: 25px;
+  color: #555;
+}
+
+.hero-button {
+  padding: 14px 30px;
+  background: black;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.hero-button:hover {
+  background: #333;
+}
+
+/* FEATURES SECTION */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 60px;
+  padding: 0 20px;
+}
+
+.feature-card {
+  background: white;
+  padding: 25px;
+  width: 260px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: 0.2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-card h3 {
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.feature-card p {
+  color: #555;
+}
+

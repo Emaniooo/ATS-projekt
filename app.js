@@ -295,3 +295,63 @@ function dragStart(e) {
   console.log("DRAG START FIRED");
   e.dataTransfer.setData("id", e.target.dataset.id);
 }
+document.addEventListener("DOMContentLoaded", async () => {
+  const profile = await getProfile();
+  const adminLink = document.getElementById("admin-link");
+
+  if (adminLink && profile && profile.role !== "admin") {
+    adminLink.style.display = "none";
+  }
+});
+document.addEventListener("DOMContentLoaded", async () => {
+  const authButton = document.getElementById("auth-button");
+  const adminLink = document.getElementById("admin-link");
+  const profileIconContainer = document.getElementById("profile-icon-container");
+  const profileDropdown = document.getElementById("profile-dropdown");
+
+  const { data: { user } } = await client.auth.getUser();
+
+  if (user) {
+    // Visa profil-ikon
+    profileIconContainer.style.display = "block";
+
+    // Dölj Logga in-knappen
+    authButton.style.display = "none";
+
+    // Fyll dropdown
+    const profile = await getProfile();
+    document.getElementById("dd-name").textContent = user.email.split("@")[0];
+    document.getElementById("dd-email").textContent = user.email;
+
+    // Roll-styrning
+    if (profile.role !== "admin" && adminLink) {
+      adminLink.style.display = "none";
+    }
+
+    // Logga ut
+    document.getElementById("logout-btn").addEventListener("click", async () => {
+      await client.auth.signOut();
+      window.location.href = "home.html";
+    });
+
+    // Dropdown toggle
+    document.getElementById("profile-icon").addEventListener("click", () => {
+      profileDropdown.style.display =
+        profileDropdown.style.display === "block" ? "none" : "block";
+    });
+
+    // Stäng dropdown om man klickar utanför
+    document.addEventListener("click", (e) => {
+      if (!profileIconContainer.contains(e.target)) {
+        profileDropdown.style.display = "none";
+      }
+    });
+
+  } else {
+    // Utloggad
+    authButton.style.display = "block";
+    profileIconContainer.style.display = "none";
+
+    if (adminLink) adminLink.style.display = "none";
+  }
+});

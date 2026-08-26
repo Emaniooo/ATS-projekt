@@ -2,12 +2,14 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Panel</title>
+  <title>Mini‑ATS – Start</title>
   <link rel="stylesheet" href="styles.css">
   <script src="supabase.js"></script>
   <script src="app.js" defer></script>
 </head>
+
 <body>
+
 <nav class="navbar">
   <div class="nav-left">
     <a href="home.html" class="nav-logo">Mini‑ATS</a>
@@ -16,10 +18,8 @@
   </div>
 
   <div class="nav-right">
-    <!-- Profil-ikon (visas bara när man är inloggad) -->
     <div id="profile-icon-container" class="profile-icon-container" style="display:none;">
       <img src="user.png" class="profile-icon" id="profile-icon">
-
       <div id="profile-dropdown" class="profile-dropdown">
         <p><strong id="dd-name"></strong></p>
         <p id="dd-email"></p>
@@ -27,31 +27,32 @@
       </div>
     </div>
 
-    <!-- Logga in-knapp (visas när man är utloggad) -->
     <a href="index.html" id="auth-button">Logga in</a>
   </div>
 </nav>
 
+<section class="hero">
+  <h1>Bygg ditt eget ATS</h1>
+  <p>Hantera kandidater, jobb och rekrytering på ett enkelt och snabbt sätt.</p>
+  <a href="index.html" class="hero-button">Kom igång</a>
+</section>
 
-  <div class="nav-right">
-    <a href="index.html" class="nav-login">Logga in</a>
+<section class="features">
+  <div class="feature-card">
+    <h3>📋 Jobbhantering</h3>
+    <p>Skapa och hantera jobbannonser på några sekunder.</p>
   </div>
-</nav>
 
-  <h1>Admin Panel</h1>
+  <div class="feature-card">
+    <h3>👤 Kandidater</h3>
+    <p>Få full kontroll över alla kandidater och deras status.</p>
+  </div>
 
-  <h2>Skapa kund</h2>
-  <form id="create-customer-form">
-    <input type="text" id="customer-name" placeholder="Kundnamn" required>
-    <button type="submit">Skapa kund</button>
-  </form>
-
-  <h2>Skapa användare</h2>
-  <form id="create-user-form">
-    <input type="email" id="new-user-email" placeholder="Email" required>
-    <input type="password" id="new-user-password" placeholder="Lösenord" required>
-    <button type="submit">Skapa användare</button>
-  </form>
+  <div class="feature-card">
+    <h3>📊 Kanban‑board</h3>
+    <p>Dra och släpp kandidater mellan olika rekryteringssteg.</p>
+  </div>
+</section>
 
 </body>
 </html>

@@ -8,11 +8,31 @@
   <script src="app.js" defer></script>
 </head>
 <body>
-<nav>
-  <a href="dashboard.html">Dashboard</a>
-  <a href="admin.html">Admin</a>
-  <a href="index.html">Logga ut</a>
+<nav class="navbar">
+  <div class="nav-left">
+    <a href="home.html" class="nav-logo">Mini‑ATS</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="admin.html" id="admin-link">Admin</a>
+  </div>
+
+  <div class="nav-right">
+    <!-- Profil-ikon (visas bara när man är inloggad) -->
+    <div id="profile-icon-container" class="profile-icon-container" style="display:none;">
+      <img src="user.png" class="profile-icon" id="profile-icon">
+
+      <div id="profile-dropdown" class="profile-dropdown">
+        <p><strong id="dd-name"></strong></p>
+        <p id="dd-email"></p>
+        <button id="logout-btn">Logga ut</button>
+      </div>
+    </div>
+
+    <!-- Logga in-knapp (visas när man är utloggad) -->
+    <a href="index.html" id="auth-button">Logga in</a>
+  </div>
 </nav>
+
+
   <h1>Dashboard</h1>
 
   <h2>Skapa nytt jobb</h2>
