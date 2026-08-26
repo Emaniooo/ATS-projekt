@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <title>ATS Login</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="supabase.js"></script>
-    <script src="app.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logga in – Mini‑ATS</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="supabase.js"></script>
+  <script src="app.js" defer></script>
 </head>
 
-<body>
+<body class="login-body">
 
-<div class="login-container">
-    <h2>Logga in</h2>
+  <div class="login-wrapper">
+    <div class="login-card">
+      <h1>Logga in</h1>
+      <p class="login-subtitle">Välkommen tillbaka till Mini‑ATS</p>
 
-    <form id="login-form">
+      <form id="login-form">
         <input type="email" id="email" placeholder="Email" required>
         <input type="password" id="password" placeholder="Lösenord" required>
         <button type="submit">Logga in</button>
-    </form>
+      </form>
 
-    <p id="login-error"></p>
-</div>
+      <p id="login-message"></p>
+    </div>
+  </div>
 
 </body>
 </html>
