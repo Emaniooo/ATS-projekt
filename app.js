@@ -3,43 +3,112 @@ const SUPABASE_ANON_KEY = "sb_publishable_0eSjt8UQ9jvlKiSBsU4EEw_m847MCqW";
 
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// LOGIN
-document.addEventListener("DOMContentLoaded", () => {
+// HÄMTA PROFIL
+async function getProfile() {
+  const { data: { user } } = await client.auth.getUser();
+  if (!user) return null;
+
+  const { data, error } = await client
+    .from("user_profiles")
+    .select("role, customer_id")
+    .eq("id", user.id)
+    .single();
+
+  if (error) {
+    console.error("getProfile error:", error);
+    return null;
+  }
+
+  return data;
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  // LOGIN
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      const emailEl = document.getElementById("email");
+      const passwordEl = document.getElementById("password");
+      const errorEl = document.getElementById("login-error");
 
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const email = emailEl ? emailEl.value : "";
+      const password = passwordEl ? passwordEl.value : "";
 
-      const { data, error } = await client.auth.signInWithPassword({
-        email,
-        password
-      });
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
 
       if (error) {
-        document.getElementById("login-error").textContent = error.message;
+        if (errorEl) errorEl.textContent = error.message;
         return;
       }
 
       const profile = await getProfile();
-
-      if (profile.role === "admin") {
-        window.location.href = "admin.html";
-      } else {
+      if (!profile || !profile.role) {
+        // fallback: skicka till dashboard om profil saknas
         window.location.href = "dashboard.html";
+        return;
       }
+
+      window.location.href = profile.role === "admin" ? "admin.html" : "dashboard.html";
     });
   }
 
-  // Ladda jobb när dashboard öppnas
+  // PROFILMENY (navbar, används på sidor som har den)
+  const authButton = document.getElementById("auth-button");
+  const adminLink = document.getElementById("admin-link");
+  const profileIconContainer = document.getElementById("profile-icon-container");
+  const profileDropdown = document.getElementById("profile-dropdown");
+  const ddName = document.getElementById("dd-name");
+  const ddEmail = document.getElementById("dd-email");
+  const logoutBtn = document.getElementById("logout-btn");
+  const profileIcon = document.getElementById("profile-icon");
+
+  const { data: { user } } = await client.auth.getUser();
+
+  if (user) {
+    if (profileIconContainer) profileIconContainer.style.display = "block";
+    if (authButton) authButton.style.display = "none";
+
+    const profile = await getProfile();
+
+    if (ddName) ddName.textContent = user.email.split("@")[0];
+    if (ddEmail) ddEmail.textContent = user.email;
+
+    if (profile && profile.role !== "admin" && adminLink) {
+      adminLink.style.display = "none";
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async () => {
+        await client.auth.signOut();
+        window.location.href = "home.html";
+      });
+    }
+
+    if (profileIcon && profileDropdown && profileIconContainer) {
+      profileIcon.addEventListener("click", () => {
+        profileDropdown.style.display =
+          profileDropdown.style.display === "block" ? "none" : "block";
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!profileIconContainer.contains(e.target)) {
+          profileDropdown.style.display = "none";
+        }
+      });
+    }
+  } else {
+    if (authButton) authButton.style.display = "block";
+    if (profileIconContainer) profileIconContainer.style.display = "none";
+    if (adminLink) adminLink.style.display = "none";
+  }
+
+  // DASHBOARD: jobb + kandidater + kanban
   if (document.getElementById("jobs-list")) {
     loadJobs();
     loadKanban();
   }
 
-  // Skapa jobb
   const createJobForm = document.getElementById("create-job-form");
   if (createJobForm) {
     createJobForm.addEventListener("submit", (e) => {
@@ -48,7 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Skapa kandidat
   const createCandidateForm = document.getElementById("create-candidate-form");
   if (createCandidateForm) {
     createCandidateForm.addEventListener("submit", (e) => {
@@ -57,7 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Filter‑events för kanban
   const filterJob = document.getElementById("filter-job");
   if (filterJob) {
     filterJob.addEventListener("change", loadKanban);
@@ -67,7 +134,50 @@ document.addEventListener("DOMContentLoaded", () => {
     filterName.addEventListener("input", loadKanban);
   }
 
-  // Drag‑and‑drop listeners
+  // ADMIN PANEL
+  const createCustomerForm = document.getElementById("create-customer-form");
+  if (createCustomerForm) {
+    createCustomerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nameEl = document.getElementById("customer-name");
+      const name = nameEl ? nameEl.value : "";
+
+      const { error } = await client.from("customers").insert({ name });
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      alert("Kund skapad!");
+      createCustomerForm.reset();
+    });
+  }
+
+  const createUserForm = document.getElementById("create-user-form");
+  if (createUserForm) {
+    createUserForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const emailEl = document.getElementById("new-user-email");
+      const passwordEl = document.getElementById("new-user-password");
+
+      const email = emailEl ? emailEl.value : "";
+      const password = passwordEl ? passwordEl.value : "";
+
+      const { data, error } = await client.auth.signUp({ email, password });
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      alert("Användare skapad!");
+      createUserForm.reset();
+    });
+  }
+
+  // Drag‑and‑drop listeners för kanban
   document.querySelectorAll(".kanban-items").forEach(col => {
     col.addEventListener("dragover", e => e.preventDefault());
 
@@ -75,8 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       const id = e.dataTransfer.getData("id");
-
       const column = col.closest(".kanban-column");
+      if (!column) return;
+
       const newStage = column.dataset.stage;
 
       await client
@@ -89,30 +200,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// HÄMTA PROFIL
-async function getProfile() {
-  const { data: { user } } = await client.auth.getUser();
-  if (!user) return null;
-
-  const { data } = await client
-    .from("user_profiles")
-    .select("role, customer_id")
-    .eq("id", user.id)
-    .single();
-
-  return data;
-}
-
 // LÄS JOBB
 async function loadJobs() {
   const { data: { user } } = await client.auth.getUser();
   if (!user) return;
 
-  const { data: profile } = await client
+  const { data: profile, error: profileError } = await client
     .from("user_profiles")
     .select("customer_id")
     .eq("id", user.id)
     .single();
+
+  if (profileError || !profile) {
+    console.error("loadJobs profile error:", profileError);
+    return;
+  }
 
   const { data: jobs, error } = await client
     .from("jobs")
@@ -139,7 +241,6 @@ async function loadJobs() {
     });
   }
 
-  // Fyll dropdown för kandidater
   const jobSelect = document.getElementById("candidate-job");
   if (jobSelect) {
     jobSelect.innerHTML = '<option value="">Välj jobb</option>';
@@ -148,7 +249,6 @@ async function loadJobs() {
     });
   }
 
-  // Fyll filter-job dropdown
   const filterJob = document.getElementById("filter-job");
   if (filterJob) {
     filterJob.innerHTML = '<option value="">Alla jobb</option>';
@@ -160,16 +260,26 @@ async function loadJobs() {
 
 // SKAPA JOBB
 async function createJob() {
-  const title = document.getElementById("job-title").value;
-  const description = document.getElementById("job-description").value;
+  const titleEl = document.getElementById("job-title");
+  const descriptionEl = document.getElementById("job-description");
+  const msgEl = document.getElementById("job-message");
+
+  const title = titleEl ? titleEl.value : "";
+  const description = descriptionEl ? descriptionEl.value : "";
 
   const { data: { user } } = await client.auth.getUser();
+  if (!user) return;
 
-  const { data: profile } = await client
+  const { data: profile, error: profileError } = await client
     .from("user_profiles")
     .select("customer_id")
     .eq("id", user.id)
     .single();
+
+  if (profileError || !profile) {
+    if (msgEl) msgEl.textContent = "Kunde inte hämta profil.";
+    return;
+  }
 
   const { error } = await client
     .from("jobs")
@@ -181,12 +291,13 @@ async function createJob() {
     });
 
   if (error) {
-    document.getElementById("job-message").textContent = error.message;
+    if (msgEl) msgEl.textContent = error.message;
     return;
   }
 
-  document.getElementById("job-message").textContent = "Jobb skapat!";
-  document.getElementById("create-job-form").reset();
+  if (msgEl) msgEl.textContent = "Jobb skapat!";
+  const form = document.getElementById("create-job-form");
+  if (form) form.reset();
 
   await loadJobs();
   await loadKanban();
@@ -194,18 +305,30 @@ async function createJob() {
 
 // SKAPA KANDIDAT
 async function createCandidate() {
-  const name = document.getElementById("candidate-name").value;
-  const email = document.getElementById("candidate-email").value;
-  const linkedin = document.getElementById("candidate-linkedin").value;
-  const jobId = document.getElementById("candidate-job").value;
+  const nameEl = document.getElementById("candidate-name");
+  const emailEl = document.getElementById("candidate-email");
+  const linkedinEl = document.getElementById("candidate-linkedin");
+  const jobIdEl = document.getElementById("candidate-job");
+  const msgEl = document.getElementById("candidate-message");
+
+  const name = nameEl ? nameEl.value : "";
+  const email = emailEl ? emailEl.value : "";
+  const linkedin = linkedinEl ? linkedinEl.value : "";
+  const jobId = jobIdEl ? jobIdEl.value : "";
 
   const { data: { user } } = await client.auth.getUser();
+  if (!user) return;
 
-  const { data: profile } = await client
+  const { data: profile, error: profileError } = await client
     .from("user_profiles")
     .select("customer_id")
     .eq("id", user.id)
     .single();
+
+  if (profileError || !profile) {
+    if (msgEl) msgEl.textContent = "Kunde inte hämta profil.";
+    return;
+  }
 
   const { error } = await client
     .from("candidates")
@@ -219,12 +342,13 @@ async function createCandidate() {
     });
 
   if (error) {
-    document.getElementById("candidate-message").textContent = error.message;
+    if (msgEl) msgEl.textContent = error.message;
     return;
   }
 
-  document.getElementById("candidate-message").textContent = "Kandidat skapad!";
-  document.getElementById("create-candidate-form").reset();
+  if (msgEl) msgEl.textContent = "Kandidat skapad!";
+  const form = document.getElementById("create-candidate-form");
+  if (form) form.reset();
 
   await loadKanban();
 }
@@ -235,11 +359,16 @@ async function loadKanban() {
   const { data: { user } } = await client.auth.getUser();
   if (!user) return;
 
-  const { data: profile } = await client
+  const { data: profile, error: profileError } = await client
     .from("user_profiles")
     .select("customer_id")
     .eq("id", user.id)
     .single();
+
+  if (profileError || !profile) {
+    console.error("loadKanban profile error:", profileError);
+    return;
+  }
 
   const { data: candidates, error } = await client
     .from("candidates")
@@ -290,68 +419,3 @@ function renderKanban(candidates) {
 function dragStart(e) {
   e.dataTransfer.setData("id", e.target.dataset.id);
 }
-
-function dragStart(e) {
-  console.log("DRAG START FIRED");
-  e.dataTransfer.setData("id", e.target.dataset.id);
-}
-document.addEventListener("DOMContentLoaded", async () => {
-  const profile = await getProfile();
-  const adminLink = document.getElementById("admin-link");
-
-  if (adminLink && profile && profile.role !== "admin") {
-    adminLink.style.display = "none";
-  }
-});
-document.addEventListener("DOMContentLoaded", async () => {
-  const authButton = document.getElementById("auth-button");
-  const adminLink = document.getElementById("admin-link");
-  const profileIconContainer = document.getElementById("profile-icon-container");
-  const profileDropdown = document.getElementById("profile-dropdown");
-
-  const { data: { user } } = await client.auth.getUser();
-
-  if (user) {
-    // Visa profil-ikon
-    profileIconContainer.style.display = "block";
-
-    // Dölj Logga in-knappen
-    authButton.style.display = "none";
-
-    // Fyll dropdown
-    const profile = await getProfile();
-    document.getElementById("dd-name").textContent = user.email.split("@")[0];
-    document.getElementById("dd-email").textContent = user.email;
-
-    // Roll-styrning
-    if (profile.role !== "admin" && adminLink) {
-      adminLink.style.display = "none";
-    }
-
-    // Logga ut
-    document.getElementById("logout-btn").addEventListener("click", async () => {
-      await client.auth.signOut();
-      window.location.href = "home.html";
-    });
-
-    // Dropdown toggle
-    document.getElementById("profile-icon").addEventListener("click", () => {
-      profileDropdown.style.display =
-        profileDropdown.style.display === "block" ? "none" : "block";
-    });
-
-    // Stäng dropdown om man klickar utanför
-    document.addEventListener("click", (e) => {
-      if (!profileIconContainer.contains(e.target)) {
-        profileDropdown.style.display = "none";
-      }
-    });
-
-  } else {
-    // Utloggad
-    authButton.style.display = "block";
-    profileIconContainer.style.display = "none";
-
-    if (adminLink) adminLink.style.display = "none";
-  }
-});
