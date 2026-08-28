@@ -153,50 +153,57 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // ADMIN PANEL: skapa användare (Alternativ 1)
-  const createUserForm = document.getElementById("create-user-form");
-  if (createUserForm) {
-    createUserForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  // ADMIN PANEL: skapa användare via Edge Function
+const createUserForm = document.getElementById("create-user-form");
+if (createUserForm) {
+  createUserForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const emailEl = document.getElementById("new-user-email");
-      const passwordEl = document.getElementById("new-user-password");
+    const emailEl = document.getElementById("new-user-email");
+    const passwordEl = document.getElementById("new-user-password");
 
-      const email = emailEl ? emailEl.value : "";
-      const password = passwordEl ? passwordEl.value : "";
+    const email = emailEl ? emailEl.value : "";
+    const password = passwordEl ? passwordEl.value : "";
 
-      // 1. Hämta adminens profil (för customer_id)
-      const { data: { user: adminUser } } = await client.auth.getUser();
-      const { data: adminProfile, error: adminProfileError } = await client
-        .from("user_profiles")
-        .select("customer_id")
-        .eq("id", adminUser.id)
-        .maybeSingle();
+    // 1. Hämta adminens profil (för customer_id)
+    const { data: { user: adminUser } } = await client.auth.getUser();
+    const { data: adminProfile, error: adminProfileError } = await client
+      .from("user_profiles")
+      .select("customer_id")
+      .eq("id", adminUser.id)
+      .maybeSingle();
 
-      if (adminProfileError || !adminProfile) {
-        alert("Kunde inte hämta adminens profil.");
-        return;
+    if (adminProfileError || !adminProfile) {
+      alert("Kunde inte hämta adminens profil.");
+      return;
+    }
+
+    // 2. Anropa Edge Function för att skapa användaren
+    const res = await fetch(
+      "https://ociqnhrzyyphecbdzjdw.supabase.co/functions/v1/createUser",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          customer_id: adminProfile.customer_id
+        })
       }
+    );
 
-      // 2. Skapa auth-user
-      const { data, error } = await client.auth.signUp({ email, password });
+    const result = await res.json();
 
-      if (error) {
-        alert(error.message);
-        return;
-      }
+    if (result.error) {
+      alert(result.error.message);
+      return;
+    }
 
-      // 3. Skapa user_profiles-rad för nya användaren
-      await client.from("user_profiles").insert({
-        id: data.user.id,
-        role: "customer",
-        customer_id: adminProfile.customer_id
-      });
+    alert("Användare skapad!");
+    createUserForm.reset();
+  });
+}
 
-      alert("Användare skapad!");
-      createUserForm.reset();
-    });
-  }
 
   // Drag‑and‑drop listeners för kanban
   document.querySelectorAll(".kanban-items").forEach(col => {
