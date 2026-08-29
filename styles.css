@@ -84,7 +84,12 @@ button {
 .nav-right a {
   text-decoration: none;
   font-weight: bold;
-  color: #0077ff;
+  padding: 14px 30px;
+  background: black;
+  color: white;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: 0.2s;
 }
 
 /* PROFILMENY */

@@ -54,5 +54,22 @@
   </div>
 </section>
 
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const { data: { user } } = await client.auth.getUser();
+  const cta = document.querySelector(".hero-button");
+
+  if (!cta) return;
+
+  if (user) {
+    // Användaren är inloggad → skicka till dashboard
+    cta.href = "dashboard.html";
+  } else {
+    // Utloggad → skicka till login
+    cta.href = "index.html";
+  }
+});
+</script>
+
 </body>
 </html>
