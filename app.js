@@ -447,3 +447,15 @@ function renderKanban(candidates) {
 function dragStart(e) {
   e.dataTransfer.setData("id", e.target.dataset.id);
 }
+const resetBtn = document.getElementById("reset-filters");
+if (resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    const jobFilter = document.getElementById("filter-job");
+    const nameFilter = document.getElementById("filter-name");
+
+    if (jobFilter) jobFilter.value = "";
+    if (nameFilter) nameFilter.value = "";
+
+    loadKanban();
+  });
+}

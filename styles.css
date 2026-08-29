@@ -225,7 +225,7 @@ button {
 .form-card input,
 .form-card textarea,
 .form-card select {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   margin-bottom: 12px;
   border-radius: 6px;
@@ -306,7 +306,7 @@ button {
 }
 
 .form-card input {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   margin-bottom: 12px;
   border-radius: 6px;
@@ -415,6 +415,21 @@ button {
   color: red;
 }
 
+.reset-btn {
+  padding: 10px 16px;
+  background: #46753a;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+      width: 150px;
+}
+
+.reset-btn:hover {
+  background: #46753a9c;
+}
+
+
 /* ===== RESPONSIVE BREAKPOINTS ===== */
 
 /* 📱 Mobil */
@@ -441,3 +456,4 @@ button {
     max-width: 450px;
   }
 }
+
