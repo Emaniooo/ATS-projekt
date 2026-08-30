@@ -12,15 +12,27 @@ async function getProfile() {
     .from("user_profiles")
     .select("role, customer_id")
     .eq("id", user.id)
-.maybeSingle();
+    .maybeSingle();
 
   if (error) {
     console.error("getProfile error:", error);
     return null;
   }
 
+  //  Om profilen saknas → skapa en automatiskt
+  if (!data) {
+    await client.from("user_profiles").insert({
+      id: user.id,
+      role: "customer",
+      customer_id: null   // eller sätt rätt värde om du vill
+    });
+
+    return { role: "customer", customer_id: null };
+  }
+
   return data;
 }
+
 
 document.addEventListener("DOMContentLoaded", async () => {
   // LOGIN
