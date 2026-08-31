@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard</title>
+  <title>Översikt</title>
   <link rel="stylesheet" href="styles.css">
   <script src="supabase.js"></script>
   <script src="app.js" defer></script>
@@ -11,8 +11,8 @@
 <nav class="navbar">
   <div class="nav-left">
     <a href="home.html" class="nav-logo">Mini‑ATS</a>
-    <a href="dashboard.html" class="active">Dashboard</a>
-    <a href="admin.html" id="admin-link">Admin</a>
+    <a href="dashboard.html" class="active" id="dashboard-link">Dashboard</a>
+    <a href="admin.html" id="admin-link">Adminpanel</a>
   </div>
 
   <div class="nav-right">
@@ -35,14 +35,13 @@
 <div class="page-container">
   <h1 class="page-title">Dashboard</h1>
 
-
 <div class="dashboard-grid">
 
   <section class="dash-section">
     <h2>Skapa nytt jobb</h2>
     <form id="create-job-form" class="form-card">
       <input type="text" id="job-title" placeholder="Jobbtitel" required>
-      <textarea id="job-description" placeholder="Beskrivning"></textarea>
+      <textarea id="job-description" placeholder="Jobbbeskrivning"></textarea>
       <button type="submit">Skapa jobb</button>
     </form>
     <p id="job-message"></p>
@@ -52,8 +51,8 @@
     <h2>Skapa kandidat</h2>
     <form id="create-candidate-form" class="form-card">
       <input type="text" id="candidate-name" placeholder="Namn" required>
-      <input type="email" id="candidate-email" placeholder="Email" required>
-      <input type="text" id="candidate-linkedin" placeholder="LinkedIn URL">
+      <input type="email" id="candidate-email" placeholder="E‑post" required>
+      <input type="text" id="candidate-linkedin" placeholder="LinkedIn‑profil (valfritt)">
       <select id="candidate-job">
         <option value="">Välj jobb</option>
       </select>
@@ -70,44 +69,44 @@
 </section>
 
 <section class="dash-section">
-  <h2>Kandidat Kanban</h2>
+  <h2>Kandidat‑Kanban</h2>
 
   <div id="kanban-filters" class="kanban-filters">
     <select id="filter-job">
       <option value="">Alla jobb</option>
     </select>
     <input id="filter-name" type="text" placeholder="Sök kandidat...">
-    <button id="reset-filters" class="reset-btn">Reset filter</button>
+    <button id="reset-filters" class="reset-btn">Återställ filter</button>
   </div>
 
   <div id="kanban-board" class="kanban-board">
     <div class="kanban-column" data-stage="applied">
-      <h3>Applied</h3>
+      <h3>Ansökt</h3>
       <div class="kanban-items" id="col-applied"></div>
     </div>
 
     <div class="kanban-column" data-stage="screening">
-      <h3>Screening</h3>
+      <h3>Granskning</h3>
       <div class="kanban-items" id="col-screening"></div>
     </div>
 
     <div class="kanban-column" data-stage="interview">
-      <h3>Interview</h3>
+      <h3>Intervju</h3>
       <div class="kanban-items" id="col-interview"></div>
     </div>
 
     <div class="kanban-column" data-stage="offer">
-      <h3>Offer</h3>
+      <h3>Erbjudande</h3>
       <div class="kanban-items" id="col-offer"></div>
     </div>
 
     <div class="kanban-column" data-stage="hired">
-      <h3>Hired</h3>
+      <h3>Anställd</h3>
       <div class="kanban-items" id="col-hired"></div>
     </div>
 
     <div class="kanban-column" data-stage="rejected">
-      <h3>Rejected</h3>
+      <h3>Avslagen</h3>
       <div class="kanban-items" id="col-rejected"></div>
     </div>
   </div>
@@ -115,7 +114,7 @@
 </div>
 </body>
 <footer>
-  <p>© 2026 Mini‑ATS — Built by Eman</p>
+  <p>© 2026 Mini‑ATS — Byggt av Eman</p>
 </footer>
 
 </html>
