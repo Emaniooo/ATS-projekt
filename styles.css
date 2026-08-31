@@ -600,11 +600,103 @@ footer {
    RESPONSIVE
 ============================ */
 @media (max-width: 480px) {
-  .hero h1 {
-    font-size: 36px;
+
+  /* Typografi */
+  h1 { font-size: 32px; }
+  h2 { font-size: 26px; }
+  h3 { font-size: 20px; }
+  p  { font-size: 16px; }
+
+  /* Page title centrerad */
+  .page-title {
+    padding-left: 0;
+    text-align: center;
+    font-size: 32px;
   }
+
+  /* Navbar */
+  .navbar {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .nav-left a {
+    margin-right: 12px;
+    font-size: 14px;
+  }
+
+  /* Hero */
+  .hero {
+    margin-top: 20px;
+    padding: 20px;
+  }
+
+  .hero-button {
+    width: 100%;
+    font-size: 18px;
+  }
+
+  /* Features */
   .features {
     flex-direction: column;
-    align-items: center;
+    gap: 20px;
+  }
+
+  /* Form cards */
+  .form-card {
+    padding: 18px;
+  }
+
+  .form-card input,
+  .form-card textarea,
+  .form-card select {
+    width: 100%;
+  }
+
+  /* Kanban */
+  .kanban-board {
+    grid-template-columns: 1fr;
+  }
+
+  /* Job cards */
+  .jobs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Typografi */
+  h1 { font-size: 42px; }
+  h2 { font-size: 32px; }
+  h3 { font-size: 24px; }
+  p  { font-size: 17px; }
+
+  /* Page title */
+  .page-title {
+    padding-left: 0;
+    text-align: center;
+  }
+
+  /* Navbar */
+  .navbar {
+    padding: 16px;
+  }
+
+  /* Features */
+  .features {
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  /* Kanban */
+  .kanban-board {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  /* Job cards */
+  .jobs-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }

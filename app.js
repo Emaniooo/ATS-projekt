@@ -112,6 +112,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (authButton) authButton.style.display = "block";
     if (profileIconContainer) profileIconContainer.style.display = "none";
     if (adminLink) adminLink.style.display = "none";
+
+    const dashboardLink = document.getElementById("dashboard-link");
+    if (dashboardLink) dashboardLink.style.display = "none";
   }
 
   // DASHBOARD: jobb + kandidater + kanban
