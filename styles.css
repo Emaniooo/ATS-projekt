@@ -1,28 +1,41 @@
 /* ============================
    GLOBAL – Premium Animated ATS
 ============================ */
-:root {
-  --bg: #f4f6fb;
-  --white: #ffffff;
-  --black: #1a1a1a;
+@import url('https://fonts.googleapis.com/css2?family=Ultra&display=swap');
 
-  /* Brand Colors */
-  --primary: #6366f1;        /* Indigo */
-  --primary-dark: #4f46e5;
-  --accent: #10b981;         /* Emerald */
-  --accent-light: #7e8091;
-  --pink: #ec4899;
+h1, h2, h3, p {
+  font-family: "Ultra", serif;
+  font-style: normal;
+}
+
+h1 { font-size: 50px; font-weight: 400; }
+h2 { font-size: 30px; font-weight: 200; }
+h3 { font-size: 25px; font-weight: 100; }
+p  { font-size: 18px; }
+
+:root {
+  --bg: #E0E1DD;        /* Light Gray */
+  --white: #ffffff;
+  --black: #0D1B2A;     /* Dark Navy */
+
+  /* Brand Colors – ersatta med din palett */
+  --primary: #415A77;        /* Steel Blue */
+  --primary-dark: #1B263B;   /* Deep Blue-Gray */
+  --accent: #778DA9;         /* Periwinkle Gray */
+  --accent-light: #E0E1DD;   /* Light Gray */
+  --pink: #0D1B2A;           /* Dark Navy (ersätter pink för harmoni) */
 
   /* Grays */
-  --gray: #6b7280;
-  --gray-light: #d1d5db;
-  --border: #e5e7eb;
+  --gray: #778DA9;           /* Periwinkle Gray */
+  --gray-light: #E0E1DD;     /* Light Gray */
+  --border: #1B263B;         /* Deep Blue-Gray */
 
   /* UI */
   --radius: 14px;
   --shadow: 0 10px 30px rgba(0,0,0,0.08);
   --transition: 0.3s ease;
 }
+
 
 body {
   font-family: "Inter", Arial, sans-serif;
@@ -52,10 +65,9 @@ body {
 }
 
 .page-title {
-  font-size: 42px;
-  font-weight: 800;
+  padding-left: 27rem;
   margin-bottom: 30px;
-  background: linear-gradient(90deg, var(--primary), var(--accent), var(--pink));
+  background: linear-gradient(90deg, var(--primary), #666e77, var(--pink));
   -webkit-background-clip: text;
   color: transparent;
   animation: titleGlow 3s infinite alternate;
@@ -148,9 +160,6 @@ body {
 .profile-icon {
   width: 42px;
   height: 42px;
-  border-radius: 50%;
-  box-shadow: var(--shadow);
-  animation: pulseIcon 3s infinite;
 }
 
 @keyframes pulseIcon {
@@ -183,9 +192,8 @@ body {
 ============================ */
 .hero {
   text-align: center;
-  margin-top: 80px;
+  margin-top: 45px;
   padding: 40px 20px;
-  animation: floatHero 6s infinite ease-in-out;
 }
 
 @keyframes floatHero {
@@ -195,8 +203,6 @@ body {
 }
 
 .hero h1 {
-  font-size: 56px;
-  font-weight: 800;
   margin-bottom: 10px;
   background: linear-gradient(90deg, var(--primary), var(--accent), var(--pink));
   -webkit-background-clip: text;
@@ -204,9 +210,8 @@ body {
 }
 
 .hero p {
-  font-size: 22px;
   color: var(--gray);
-  margin-bottom: 25px;
+  margin-bottom: 55px;
 }
 
 .hero-button {
@@ -218,6 +223,7 @@ body {
   font-size: 20px;
   box-shadow: var(--shadow);
   animation: pulseButton 3s infinite;
+  animation: floatHero 6s infinite ease-in-out;
 }
 
 @keyframes pulseButton {
@@ -267,12 +273,21 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
+  margin-bottom: 5rem;
+}
+.form-card select {
+  width: 25%;
+  padding: 14px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-light);
+  background: #f9fafb;
+  font-size: 16px;
 }
 
 .form-card input,
-.form-card textarea,
-.form-card select {
-  width: 100%;
+.form-card textarea {
+  width: 97%;
   padding: 14px;
   margin-bottom: 14px;
   border-radius: 8px;
@@ -304,6 +319,16 @@ body {
   transform: translateY(-3px);
 }
 
+.dash-section {
+  margin-top: 5rem;
+}
+
+#filter-job, #filter-name {
+  padding: 1rem;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+
 /* ============================
    KANBAN – Animated Cards
 ============================ */
@@ -329,13 +354,18 @@ body {
 }
 
 .kanban-card {
-  background: #f3f4f6;
+  background: #7c8eb1;
   padding: 12px;
   border-radius: var(--radius);
   margin-bottom: 12px;
   cursor: grab;
   box-shadow: var(--shadow);
   animation: fadeInCard 0.4s ease;
+}
+
+.kanban-filters {
+  margin-bottom: 1rem;
+  margin-top: 3rem;
 }
 
 @keyframes fadeInCard {
@@ -364,10 +394,6 @@ footer {
   to { filter: drop-shadow(0 0 14px var(--accent)); }
 }
 
-footer p {
-  font-size: 16px;
-  font-weight: 500;
-}
 /* ============================
    JOB CARDS – Restored + Enhanced
 ============================ */
@@ -406,13 +432,28 @@ footer p {
   left: 0;
   height: 4px;
   width: 100%;
-  background: linear-gradient(90deg, var(--primary), var(--accent), var(--pink));
   opacity: 0;
   transition: var(--transition);
 }
 
 .job-card:hover::before {
   opacity: 1;
+}
+
+.feature-card p {
+  font-size: 14px;
+}
+
+#job-message, #candidate-message {
+  font-size: 19px;
+    margin-top: -3rem;
+    color: #227522;
+}
+
+#dd-name, #dd-email {
+  font-size: 16px;
+  margin-top: 4px;
+  font-weight: 100;
 }
 /* ============================
    LOGGA UT & RESET BUTTONS
